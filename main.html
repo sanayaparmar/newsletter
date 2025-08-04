@@ -1,47 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Insightful Newsletter</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Insightful Newsletter - Finance & Tech News</title>
+<style>
+  :root {
+    --background-color: #f9f9f9;
+    --text-color: #222;
+    --link-color: #007acc;
+    --header-bg: #fff;
+    --nav-bg: #20232a;
+    --nav-link-color: #fff;
+    --button-bg: #007acc;
+    --button-hover-bg: #005fa3;
+  }
+  [data-theme="dark"] {
+    --background-color: #121212;
+    --text-color: #eee;
+    --link-color: #66aaff;
+    --header-bg: #1e1e1e;
+    --nav-bg: #111;
+    --nav-link-color: #66aaff;
+    --button-bg: #3366cc;
+    --button-hover-bg: #224488;
+  }
+
+  body, h1, h2, h3, p, ul {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  body {
+    background: var(--background-color);
+    color: var(--text-color);
+    transition: background 0.3s, color 0.3s;
+  }
+  a { color: var(--link-color); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  nav {
+    position: sticky; top: 0; background: var(--nav-bg);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 20px; z-index: 1000;
+  }
+  nav .logo { color: var(--nav-link-color); font-weight: bold; font-size: 1.5rem; }
+  nav ul { display: flex; list-style: none; gap: 16px; }
+  nav li a { color: var(--nav-link-color); padding: 6px 8px; }
+  nav li a:hover {
+    background: var(--button-bg); color: var(--header-bg); border-radius: 4px;
+  }
+  .theme-toggle {
+    cursor: pointer; background: transparent; border: 2px solid var(--button-bg);
+    color: var(--button-bg); padding: 4px 10px; border-radius: 20px;
+    font-weight: 600; font-size: 0.9rem;
+    transition: background 0.3s, color 0.3s;
+  }
+  .theme-toggle:hover { background: var(--button-bg); color: var(--header-bg); }
+  header.hero {
+    background: var(--header-bg); padding: 40px 20px; text-align: center;
+    box-shadow: 0 2px 6px #00000020;
+  }
+  header.hero h1 { font-size: 2.5rem; margin-bottom: 10px; font-weight: 700; }
+  header.hero p { font-size: 1.2rem; margin-bottom: 30px; color: var(--text-color);}
+  form.subscribe-form {
+    max-width: 450px; margin: 0 auto; display: flex; justify-content: center;
+  }
+  form.subscribe-form input[type="email"] {
+    flex-grow: 1; padding: 12px 15px; border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px; font-size: 1rem;
+  }
+  form.subscribe-form button {
+    padding: 12px 20px; border: none; background: var(--button-bg); color: white;
+    font-size: 1rem; cursor: pointer; border-radius: 0 4px 4px 0;
+    transition: background 0.3s;
+  }
+  form.subscribe-form button:hover { background: var(--button-hover-bg); }
+  section#news { max-width: 1000px; margin: 40px auto 60px; padding: 0 20px; }
+  section#news h2 {
+    margin-bottom: 20px; font-weight: 700; font-size: 2rem;
+    border-bottom: 3px solid var(--button-bg); padding-bottom: 6px;
+  }
+  .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+  article.news-item {
+    background: var(--header-bg); border-radius: 8px; box-shadow: 0 1px 5px #00000033;
+    overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s;
+  }
+  article.news-item:hover { transform: translateY(-5px); }
+  article.news-item img { width: 100%; height: 160px; object-fit: cover; }
+  article.news-item .content {
+    padding: 16px 20px; flex-grow: 1; display: flex; flex-direction: column;
+  }
+  article.news-item .category {
+    font-size: 0.75rem; font-weight: 700; color: var(--button-bg);
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  article.news-item h3 {
+    font-size: 1.1rem; margin-bottom: 10px; flex-grow: 1; color: var(--text-color);
+  }
+  article.news-item .timestamp { font-size: 0.75rem; color: #777; margin-bottom: 10px;}
+  article.news-item p { font-size: 0.9rem; color: var(--text-color); margin-bottom: 12px;}
+  article.news-item a.read-more { margin-top: auto; font-weight: 700; color: var(--button-bg);}
+  article.news-item a.read-more:hover { text-decoration: underline; }
+  footer.footer {
+    background: var(--nav-bg); color: #aaa; text-align: center; padding: 25px 20px;
+    font-size: 0.9rem;
+  }
+  footer.footer a { color: var(--button-bg); margin: 0 10px; }
+  @media (max-width: 600px) {
+    nav ul { gap: 8px; }
+    header.hero h1 { font-size: 1.8rem; }
+    form.subscribe-form { flex-direction: column; }
+    form.subscribe-form input, form.subscribe-form button {
+      width: 100%; border-radius: 4px; margin: 6px 0;
+    }
+  }
+</style>
 </head>
 <body>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="archive.html">Archive</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-  <header class="hero">
-    <h1>Stay Ahead with Insightful Weekly Updates</h1>
-    <p>Unbiased news & analysis on technology, science, and business—straight to your inbox.</p>
-    <form class="subscribe-form">
-      <input type="email" placeholder="Enter your email" required>
-      <button type="submit">Subscribe</button>
-    </form>
-  </header>
-  <section class="samples">
-    <h2>Recent Topics</h2>
-    <ul>
-      <li>The Future of Renewable Energy</li>
-      <li>Artificial Intelligence in Healthcare</li>
-      <li>Breakthroughs in Quantum Computing</li>
-    </ul>
-  </section>
-  <section class="benefits">
-    <h2>Why Subscribe?</h2>
-    <ul>
-      <li>No spam—just value.</li>
-      <li>Easy unsubscribe.</li>
-      <li>Trusted curation from serious sources.</li>
-    </ul>
-  </section>
-  <footer>
-    <p>&copy; 2025 Insightful Newsletter</p>
-    <a href="https://twitter.com/yourhandle">Twitter</a>
-    <a href="about.html">About</a>
-    <a href="privacy.html">Privacy Policy</a>
-  </footer>
+
+<nav>
+  <div class="logo">InsightfulNewsletter</div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#news">Latest News</a></li>
+    <li><a href="#subscribe">Subscribe</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="theme-toggle" id="themeToggle">Switch to Dark Mode</button>
+</nav>
+
+<header class="hero" id="home">
+  <h1>Stay Ahead with Insightful Finance & Technology Updates</h1>
+  <p>Unbiased news, real analysis, and essential updates straight to your inbox.</p>
+  <form id="subscribe" class="subscribe-form" action="#" method="POST">
+    <input type="email" placeholder="Your email address" required />
+    <button type="submit">Subscribe Now</button>
+  </form>
+</header>
+
+<section id="news">
+  <h2>Latest News</h2>
+  <div class="news-grid" id="newsGrid">
+    <p>Loading news...</p>
+  </div>
+</section>
+
+<section class="samples">
+  <h2>Sample Topics</h2>
+  <ul>
+    <li>Impact of 5G on Global Communications</li>
+    <li>Understanding Financial Markets Volatility</li>
+    <li>Cybersecurity in the Age of Remote Work</li>
+  </ul>
+</section>
+
+<section class="benefits">
+  <h2>Why Subscribe?</h2>
+  <ul>
+    <li>Carefully curated content with no clickbait.</li>
+    <li>No spam - unsubscribe anytime.</li>
+    <li>Trusted insights from industry experts.</li>
+  </ul>
+</section>
+
+<footer class="footer">
+  <p>&copy; 2025 Insightful Newsletter. All rights reserved.</p>
+  <a href="#">Privacy Policy</a> |
+  <a href="#">Terms of Service</a> |
+  <a href="#">Contact</a>
+</footer>
+
+<script>
+  // DARK/LIGHT THEME TOGGLE
+  const themeToggle = document.getElementById('themeToggle');
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  themeToggle.textContent = currentTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+
+  themeToggle.addEventListener('click', () => {
+    const theme = document.documentElement.getAttribute('data-theme');
+    if(theme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeToggle.textContent = 'Switch to Light Mode';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      themeToggle.textContent = 'Switch to Dark Mode';
+      localStorage.setItem('theme', 'light');
+    }
+  });
+
+  // FETCH NEWS FROM NEWSAPI.ORG
+  const apiKey = 'cbef13ae0cae4b4a944c4206e893d143'; // Replace with your NewsAPI key
+  const url = `https://newsapi.org/v2/top-headlines?category=business&language=en&pageSize=6&apiKey=${apiKey}`;
+
+  const newsGrid = document.getElementById('newsGrid');
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      newsGrid.innerHTML = '';
+      data.articles.forEach(article => {
+        const articleElem = document.createElement('article');
+        articleElem.className = 'news-item';
+        articleElem.innerHTML = `
+          <img src="${article.urlToImage || 'https://via.placeholder.com/350x160?text=No+Image'}" alt="${article.title}"/>
+          <div class="content">
+            <span class="category">Business</span>
+            <h3><a href="${article.url}" target="_blank" rel="noopener noreferrer">${article.title}</a></h3>
+            <p>${article.description || ''}</p>
+            <span class="timestamp">${new Date(article.publishedAt).toLocaleString()}</span>
+            <a href="${article.url}" target="_blank" rel="noopener noreferrer" class="read-more">Read More »</a>
+          </div>
+        `;
+        newsGrid.appendChild(articleElem);
+      });
+    })
+    .catch(err => {
+      newsGrid.innerHTML = '<p>Failed to load news. Please try again later.</p>';
+      console.error('News API fetch error:', err);
+    });
+</script>
+
 </body>
 </html>
