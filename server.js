@@ -8,9 +8,10 @@ app.use(express.static('.'));
 
 // Route for main page
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'main.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(PORT, () => {
   console.log(`Digital Marketing Lab running on port ${PORT}`);
+
 });
